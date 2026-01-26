@@ -1,5 +1,6 @@
 package com.example.learningspringboot
 
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,7 +21,7 @@ class TodoController(
 
     @PostMapping
     fun addTodo(
-        @RequestBody request: TodoCreateRequest
+       @Valid @RequestBody request: TodoCreateRequest
     ) : TodoResponse{
         return todoService.add(request)
     }
