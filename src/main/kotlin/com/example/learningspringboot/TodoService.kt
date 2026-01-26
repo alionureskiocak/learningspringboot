@@ -5,17 +5,17 @@ import org.springframework.stereotype.Service
 @Service
 class TodoService {
 
-    private val todos = mutableListOf<Todo>()
+    private val todos = mutableListOf<TodoResponse>()
     private var idCounter = 1L
 
-    fun getAll() : List<Todo>{
+    fun getAll() : List<TodoResponse>{
         return todos
     }
 
-    fun add(title : String) : Todo{
-        val todo = Todo(
+    fun add(request: TodoCreateRequest) : TodoResponse{
+        val todo = TodoResponse(
             id = idCounter++,
-            title = title,
+            title = request.title,
             completed = false
         )
         todos.add(todo)
