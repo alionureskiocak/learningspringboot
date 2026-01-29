@@ -7,7 +7,9 @@ class TodoService(
     private val todoRepository : TodoRepository
 ) {
 
-
+    fun getTodosByStatus(completed: Boolean): List<TodoResponse> {
+        return todoRepository.findAllByCompleted(completed).map { it.toResponse() }
+    }
 
     fun getAll() : List<TodoResponse>{
         return todoRepository.findAll().map { it.toResponse() }

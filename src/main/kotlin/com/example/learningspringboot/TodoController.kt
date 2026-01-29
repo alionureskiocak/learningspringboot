@@ -18,8 +18,15 @@ class TodoController(
 ) {
 
     @GetMapping
-    fun getTodos() : List<TodoResponse>{
-        return todoService.getAll()
+    fun getTodos(
+        @RequestParam(required = false) completed : Boolean?
+    ) : List<TodoResponse>{
+        return if (completed !=null){
+            todoService.getTodosByStatus(completed)
+        }
+        else{
+            todoService.getAll()
+        }
     }
 
     @PostMapping
