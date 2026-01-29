@@ -3,43 +3,45 @@ package com.example.learningspringboot
 import org.springframework.stereotype.Service
 
 @Service
-class TodoService {
+class TodoService(
+    private val todoRepository : TodoRepository
+) {
 
-    private val todos = mutableListOf<TodoResponse>()
-    private var idCounter = 1L
+
 
     fun getAll() : List<TodoResponse>{
-        return todos
+        return todoRepository.findAll().map { it.toResponse() }
     }
 
     fun add(request: TodoCreateRequest) : TodoResponse{
-        val todo = TodoResponse(
-            id = idCounter++,
+        val todo = Todo(
             title = request.title,
             completed = false
         )
-        todos.add(todo)
-        return todo
+        val savedTodo = todoRepository.save(todo)
+        return savedTodo.toResponse()
     }
 
     fun update(id : Long, request: TodoUpdateRequest) : TodoResponse{
-        val index = todos.indexOfFirst { it.id == id }
-        if (index == -1){
-            throw TodoNotFoundException(id)
-        }
-        val updated = TodoResponse(
-            id = id,
+       val existingTodo = todoRepository.findById(id)
+           .orElseThrow{ TodoNotFoundException(id) }
+        val updatedTodo = existingTodo.copy(
             title = request.title,
             completed = request.completed
         )
-        todos[index] = updated
-        return updated
+        return todoRepository.save(updatedTodo).toResponse()
     }
 
     fun delete(id : Long){
-        val removed = todos.removeIf{ it.id == id }
-        if (!removed){
+        if (!todoRepository.existsById(id)){
             throw TodoNotFoundException(id)
         }
+        todoRepository.deleteById(id)
     }
+
+    private fun Todo.toResponse() = TodoResponse(
+        id = this.id!!,
+        title = this.title,
+        completed = this.completed
+    )
 }

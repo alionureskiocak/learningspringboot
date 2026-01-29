@@ -1,7 +1,15 @@
 package com.example.learningspringboot
 
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+
+@Entity
 data class Todo(
-    val id : Long,
-    val title : String,
-    val completed : Boolean
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id : Long? = null,
+    val title : String = "",
+    val completed : Boolean = false
 )
