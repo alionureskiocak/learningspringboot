@@ -32,7 +32,7 @@ class TodoController(
     @PutMapping("/{id}")
     fun updateTodo(
         @PathVariable id : Long,
-        @RequestBody request: TodoUpdateRequest
+        @Valid @RequestBody request: TodoUpdateRequest
     ) : TodoResponse{
         return todoService.update(id,request)
     }

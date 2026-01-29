@@ -23,4 +23,14 @@ class GlobalExceptionHandler {
         }
         return ErrorResponse(errors)
     }
+
+    @ExceptionHandler(TodoNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleTodoNotFound(
+        ex : TodoNotFoundException
+    ) : Map<String,String>{
+        return mapOf(
+            "error" to ex.message!!
+        )
+    }
 }

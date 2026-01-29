@@ -25,7 +25,7 @@ class TodoService {
     fun update(id : Long, request: TodoUpdateRequest) : TodoResponse{
         val index = todos.indexOfFirst { it.id == id }
         if (index == -1){
-            throw IllegalArgumentException("Couldn't find Todo!")
+            throw TodoNotFoundException(id)
         }
         val updated = TodoResponse(
             id = id,
@@ -39,7 +39,7 @@ class TodoService {
     fun delete(id : Long){
         val removed = todos.removeIf{ it.id == id }
         if (!removed){
-            throw IllegalArgumentException("Couldn't find Todo!")
+            throw TodoNotFoundException(id)
         }
     }
 }
