@@ -4,7 +4,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class TodoService(
-    private val todoRepository : TodoRepository
+    private val todoRepository : TodoRepository,
+    private val userRepository: UserRepository
 ) {
 
     fun getTodosByStatus(completed: Boolean): List<TodoResponse> {
@@ -16,9 +17,14 @@ class TodoService(
     }
 
     fun add(request: TodoCreateRequest) : TodoResponse{
+
+        val user = userRepository.findById(request.userId)
+            .orElseThrow{ RuntimeException("User not found!") }
+
         val todo = Todo(
             title = request.title,
-            completed = false
+            completed = false,
+            user = user
         )
         val savedTodo = todoRepository.save(todo)
         return savedTodo.toResponse()
