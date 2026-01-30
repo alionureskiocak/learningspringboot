@@ -29,6 +29,21 @@ class TodoController(
         }
     }
 
+    @GetMapping("/search")
+    fun search(
+        @RequestParam keyword : String,
+        @RequestParam userId : Long
+    ) : List<TodoResponse>{
+        return todoService.searchTodos(keyword,userId)
+    }
+
+    @GetMapping("/user/{userId}")
+    fun getTodosByUserId(
+        @PathVariable userId: Long
+    ): List<TodoResponse> {
+        return todoService.getTodosByUserId(userId)
+    }
+
     @PostMapping
     fun addTodo(
        @Valid @RequestBody request: TodoCreateRequest

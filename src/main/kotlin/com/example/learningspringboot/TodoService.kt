@@ -12,6 +12,21 @@ class TodoService(
         return todoRepository.findAllByCompleted(completed).map { it.toResponse() }
     }
 
+    fun getTodosByUserId(userId: Long) : List<TodoResponse> {
+        return todoRepository.findAllByUserId(userId).map {
+            it.toResponse()
+        }
+    }
+
+    fun searchTodos(keyword : String, userId : Long) : List<TodoResponse>{
+
+        val results = todoRepository.findAllByTitleContainingAndUserId(keyword,userId)
+        return results.map {
+            it.toResponse()
+        }
+    }
+
+
     fun getAll() : List<TodoResponse>{
         return todoRepository.findAll().map { it.toResponse() }
     }

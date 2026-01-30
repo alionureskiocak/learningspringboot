@@ -10,7 +10,7 @@ data class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null,
     @Column(unique = true)
-    val username : String,
+    val username : String = "",
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
     val todos : List<Todo> = mutableListOf()
 )
