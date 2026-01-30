@@ -4,6 +4,8 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 
 @Entity
 data class Todo(
@@ -11,5 +13,8 @@ data class Todo(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long? = null,
     val title : String = "",
-    val completed : Boolean = false
+    val completed : Boolean = false,
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user : User? = null
 )
