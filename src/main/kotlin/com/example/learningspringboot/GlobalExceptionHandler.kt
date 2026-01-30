@@ -33,4 +33,14 @@ class GlobalExceptionHandler {
             "error" to ex.message!!
         )
     }
+
+    @ExceptionHandler(UserNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleUserNotFound(
+        ex : UserNotFoundException
+    ) : Map<String,String>{
+        return mapOf(
+            "error" to ex.message!!
+        )
+    }
 }

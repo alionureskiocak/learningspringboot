@@ -34,7 +34,7 @@ class TodoService(
     fun add(request: TodoCreateRequest) : TodoResponse{
 
         val user = userRepository.findById(request.userId)
-            .orElseThrow{ RuntimeException("User not found!") }
+            .orElseThrow{ UserNotFoundException(request.userId) }
 
         val todo = Todo(
             title = request.title,
