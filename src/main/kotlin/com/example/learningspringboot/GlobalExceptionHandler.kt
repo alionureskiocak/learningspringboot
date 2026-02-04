@@ -43,4 +43,10 @@ class GlobalExceptionHandler {
             "error" to ex.message!!
         )
     }
+
+    @ExceptionHandler(Exception::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleAllExceptions(ex: Exception): Map<String, String> {
+        return mapOf("error" to (ex.message ?: "Beklenmedik bir hata oluştu!"))
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.learningspringboot
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -8,8 +10,13 @@ class TodoService(
     private val userRepository: UserRepository
 ) {
 
-    fun getTodosByStatus(completed: Boolean): List<TodoResponse> {
-        return todoRepository.findAllByCompleted(completed).map { it.toResponse() }
+    fun getTodos(completed: Boolean?, pageable: Pageable): Page<TodoResponse> {
+        val todos = if (completed != null) {
+            todoRepository.findAllByCompleted(completed, pageable)
+        } else {
+            todoRepository.findAll(pageable)
+        }
+        return todos.map { it.toResponse() }
     }
 
     fun getTodosByUserId(userId: Long) : List<TodoResponse> {
@@ -27,8 +34,8 @@ class TodoService(
     }
 
 
-    fun getAll() : List<TodoResponse>{
-        return todoRepository.findAll().map { it.toResponse() }
+    fun getAll(pageable : Pageable) : Page<TodoResponse>{
+        return todoRepository.findAll(pageable).map { it.toResponse() }
     }
 
     fun add(request: TodoCreateRequest) : TodoResponse{
@@ -46,13 +53,12 @@ class TodoService(
     }
 
     fun update(id : Long, request: TodoUpdateRequest) : TodoResponse{
-       val existingTodo = todoRepository.findById(id)
+       val todo = todoRepository.findById(id)
            .orElseThrow{ TodoNotFoundException(id) }
-        val updatedTodo = existingTodo.copy(
-            title = request.title,
-            completed = request.completed
-        )
-        return todoRepository.save(updatedTodo).toResponse()
+
+        todo.title = request.title
+        todo.completed = request.completed
+        return todoRepository.save(todo).toResponse()
     }
 
     fun delete(id : Long){
